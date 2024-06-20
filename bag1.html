@@ -20,14 +20,19 @@
     <div class="fullScreen">
       <model-viewer
         style="height: 100%; width: 100%;"
-        alt="Neil Armstrong's Spacesuit from the Smithsonian Digitization Programs Office and National Air and Space Museum"
+        alt="Bag 3D Model"
         src="./assets/Bag1/bag1.glb"
         ar
+        environment-image="./assets/environmentMap.hdr"
         poster="./assets/Bag1/bag1.png"
         shadow-intensity="1"
         camera-controls
         touch-action="pan-y"
-      ></model-viewer>
+      >
+        <button slot="ar-button" id="ar-button">
+          AR View
+        </button>
+      </model-viewer>
     </div>
 
     <script
@@ -36,3 +41,9 @@
     ></script>
   </body>
 </html>
+
+<!-- https://bag-poc.vercel.app/bag1.html -->
+<!-- https://bag-poc.vercel.app/bag2.html -->
+<!-- https://bag-poc.vercel.app/bag3.html -->
+<!-- https://bag-poc.vercel.app/bag4.html -->
+<!-- https://bag-poc.vercel.app/bag5.html -->
