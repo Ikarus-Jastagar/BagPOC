@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ikarus 3D</title>
+
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+      .fullScreen {
+        height: 100dvh;
+        width: 100dvw;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="fullScreen">
+      <model-viewer
+        style="height: 100%; width: 100%;"
+        alt="Neil Armstrong's Spacesuit from the Smithsonian Digitization Programs Office and National Air and Space Museum"
+        src="./assets/Bag2/bag2.glb"
+        ar
+        poster="./assets/Bag2/bag2.png"
+        shadow-intensity="1"
+        camera-controls
+        touch-action="pan-y"
+      ></model-viewer>
+    </div>
+
+    <script
+      type="module"
+      src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
+    ></script>
+  </body>
+</html>
