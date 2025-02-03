@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ikarus 3D</title>
+
+    <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+            background-color: #000;
+            overflow: hidden;
+        }
+        .fullScreen {
+            height: 100dvh;
+            width: 100dvw;
+            position: relative;
+        }
+        #buttons-Container{
+            position: absolute;
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: auto;
+            color: white;
+            border: solid white 1px;
+            border-radius: 1000px;
+            padding: 0.25rem;
+        }
+        .selectedBorder{
+            border:solid white 2px !important;
+            scale:1.1;
+        }
+        .gold{
+            background-color: #fcd38c;
+        }
+        .roseGold{
+            background-color: #ffa392;
+        }
+        .silver{
+            background-color: #bcbcbc;
+        }
+        .optionsbutton{
+            aspect-ratio: 1;
+            height: 40px;
+            width: 40px;
+            margin: 0 0.33rem;
+            border:transparent;
+            border-radius: 1000px;
+        }
+    </style>
+  </head>
+  <body>
+    <iframe id="myIframe" style="border:none;height:100dvh;width:100dvw;" src="https://viewer.ikarusdelta.com/product?id=1e02421d-4fe9-4364-bd1e-87d445f77130"></iframe>
+    <div id="buttons-Container"></div>
+    <script>
+        const iframe = document.getElementById("myIframe");
+        const classToNameMap = {
+            "Gold":"gold",
+            "Rose Gold":"roseGold",
+            "Silver":"silver"
+        }
+        // Send a message to the iframe
+        function sendMessageToIframe() {
+            const message = { type: "greeting", text: "Hello from Parent!" };
+            iframe.contentWindow.postMessage(message, "*");
+        }
+
+        var ButtonsData = [];
+        window.addEventListener("message", (event) => {
+            if(event?.data?.source?.startsWith('react-devtools')) return
+            const cont = document.getElementById("buttons-Container")
+
+            if(ButtonsData.length!==0 && event.data.length){
+                cont.innerHTML=""
+                event.data.map(catagories => {
+                    const categoryDiv = document.createElement('div')
+                    Object.entries(catagories).forEach(([key,value],index)=>{
+                        const [category,option,mat] = key.split(":")
+                        console.log("Key=>",key)
+                        if(mat=="group"){
+                            const newDiv = document.createElement("div")
+                            // debugger
+                            Object.entries(value).map(([gKey,gValue],gIndex)=>{
+                                const btn = document.createElement('button')
+                                btn.addEventListener('click',()=>{
+                                    //console.log("Sending-->",gValue)
+                                    iframe.contentWindow.postMessage(gValue,"*")
+                                })
+                                btn.classList.add("optionsbutton");
+                                btn.classList.add(classToNameMap[gKey]);
+                                gValue.selected && btn.classList.add("selectedBorder");
+                                console.log("CLASSS",classToNameMap[gKey])
+                                // btn.innerHTML = gKey
+
+                                newDiv.append(btn)
+                            })
+                            // const subHeading = document.createElement("h3")
+                            // subHeading.innerText = "->"+option
+                            // categoryDiv.appendChild(subHeading)
+                            categoryDiv.appendChild(newDiv)
+
+                        }else{
+                            // these are model buttons:
+                            const btn = document.createElement('button')
+                            btn.addEventListener('click',()=>{
+                                console.log("Sending-->",value)
+                                iframe.contentWindow.postMessage(value,"*")
+                            })
+                            console.log(value.selected)
+                            btn.classList.add("optionsbutton");
+                            value.selected && btn.classList.add("selectedBorder");
+                            btn.innerHTML = option
+                            categoryDiv.appendChild(btn)
+
+                        }
+
+
+                    })
+                    const headingElement = document.createElement('h2')
+                    headingElement.innerHTML= (Object.keys(catagories) + "").split(":")[0]
+                    // cont.innerHTML += `<h1>HEELO</h1>`
+                    // cont.appendChild(headingElement)
+                    cont.appendChild(categoryDiv)
+
+                })
+            }
+            ButtonsData = event.data
+        });
+    </script>
+
+</body>
+</html>
